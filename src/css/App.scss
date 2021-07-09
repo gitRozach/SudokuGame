@@ -1,0 +1,625 @@
+$base-color: rgb(241, 238, 238);;
+$contrast-color: black;
+$background-color: rgb(226, 224, 224);;
+
+$hover-animation-duration: .3s;
+$cell-font-size: 2rem;
+
+/*                                          BASE COMPONENTS                                          */
+
+::selection { 
+  color: rgb(0, 140, 196); 
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: Avenir, Heveltica, sans-serif;
+}
+
+#main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+html, body {
+  background: black;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#main, #root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.preloader {
+  &:before {
+    position: absolute;
+    
+    content: '';
+    left: 0;
+    width: 50%;
+    height: 100%;
+    
+    background: rgb(0, 0, 0);
+  }
+
+  &:after {
+    position: absolute;
+    
+    content: '';
+    right: 0;
+    width: 50%;
+    height: 100%;
+    
+    background: rgb(0, 0, 0);
+  }
+
+  &.finished:before {
+    @keyframes preloader-finished-before-anim {
+      to {
+        left: -50%;
+        opacity: 0;
+      }
+    }
+    animation: preloader-finished-before-anim 1s forwards;
+  }
+  
+  &.finished:after {
+    @keyframes preloader-finished-after-anim {
+      to {
+        right: -50%;
+        opacity: 0;
+      }
+    }
+    animation: preloader-finished-after-anim 1s forwards;
+  }
+
+  position: fixed;
+  pointer-events: none;
+  
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  animation: none;
+  z-index: 10;
+}
+
+/* For Mobile and Tablets */
+@media (max-resolution: 1dppx) {
+  header {
+    @keyframes header-animation {
+      to {
+        height: 15%;
+        opacity: 1.0;
+      }
+    }
+
+    & h3 {
+      color: white;
+    }
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    animation: header-animation 1s forwards;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+    border: 0px solid $base-color;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background: transparent;
+    
+    text-align: center;
+    font-family: 'Roboto';
+    font-size: 35px;
+    
+    span {
+      margin-top: 0.4rem;
+    }  
+  }
+
+  .sudoku-controls {
+    @keyframes sudoku-controls-anim {
+      from {
+        margin-top: 0vh;
+      }
+      to {
+        margin-top: 5vh;
+      }
+    }
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    animation: sudoku-controls-anim .8s forwards;
+  }
+
+  /*#sudoku-grid {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 5;
+  }*/
+
+  #grid-list {
+    @keyframes sudoku-grid-anim {
+      from {
+        margin-top: 0vh;
+      }
+      to {
+        margin-top: 5vh;
+      }
+    }
+
+    display: grid;
+    
+    grid-template-columns: repeat(9, 10vh);
+    grid-template-rows: repeat(9, 10vh);
+    
+    justify-content: center;
+    align-content: center;
+    
+    grid-gap: 0rem;
+    list-style: none;
+    
+    padding: 0;
+    margin-left: 0;
+    animation: sudoku-grid-anim .8s forwards;
+  }
+
+  .control-button  {
+    position: relative;
+    display: inline-block;
+    padding: 10px 30px;
+    margin: 10px;
+  
+    background: transparent;
+    color: white;
+    
+    letter-spacing: 5px;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-align: center;
+  
+    width: 360px;
+    min-height: 50px;
+  
+    overflow: hidden;
+    transition: .2s;
+  }
+}
+
+/* For Desktop */
+@media screen and (min-width: 780px) {
+  header {
+    @keyframes header-animation-in {
+      to {
+        height: 100px;
+        opacity: 1.0;
+      }
+    }
+
+    @keyframes header-animation-out {
+      to {
+        height: 10%;
+        opacity: 1.0;
+      }
+    }
+
+    &:hover {
+      height: 15%;
+      opacity: 1.0;
+    }
+
+    &h3 {
+      font-size: 20px;
+      color: white;
+    }
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 5%;
+    opacity: 0.0;
+    transition: all .7s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+    border: 0px solid transparent;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background: transparent;
+    
+    text-align: center;
+    font-size: $cell-font-size;
+    font-family: 'Roboto';
+    font-size: 40px;
+  }
+
+  .sudoku-controls {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /*.sudoku-grid {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: transparent;
+    z-index: 5;
+  }*/
+
+  #grid-list {
+    @keyframes sudoku-grid-anim {
+      from {
+        margin-left: 0vh;
+      }
+      to {
+        margin-left: 5vh;
+      }
+    }
+
+    display: grid;
+    
+    grid-template-columns: repeat(9, 10vh);
+    grid-template-rows: repeat(9, 10vh);
+    
+    justify-content: center;
+    align-content: center;
+    
+    grid-gap: 0rem;
+    list-style: none;
+    
+    padding: 0;
+    margin-top: 0;
+    animation: sudoku-grid-anim .8s forwards;
+  }
+
+  .control-button  {
+    position: relative;
+    display: inline-block;
+    padding: 10px 30px;
+    margin: 30px;
+  
+    background: transparent;
+    color: white;
+    
+    letter-spacing: 4px;
+    text-decoration: none;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-align: center;
+  
+    width: 300px;
+  
+    overflow: hidden;
+    transition: .2s;
+  }
+}
+
+li:nth-child(n) {
+  border: 2px solid transparent;
+  margin: 1px;
+}
+
+li:nth-child(n):nth-child(-n+9) {
+  border-top: 4px solid transparent;
+  margin-top: 6px;
+}
+
+li:nth-child(n+73):nth-child(-n+81) {
+  border-bottom: 4px solid transparent;
+  margin-bottom: 6px;
+}
+
+li:nth-child(3n) {
+  border-right: 4px solid transparent;
+  margin-right: 6px;
+}
+
+li:nth-child(9n+1) {
+  border-left: 4px solid transparent;
+  margin-left: 6px;
+}
+
+li:nth-child(n+19):nth-child(-n+27) {
+  border-bottom: 4px solid transparent;
+  margin-bottom: 6px;
+}
+
+li:nth-child(n+46):nth-child(-n+54) {
+  border-bottom: 4px solid transparent;
+  margin-bottom: 6px;
+}
+
+li:nth-child(1) {
+  border-top-left-radius: .3vw;
+}
+
+li:nth-child(9) {
+  border-top-right-radius: .3vw;
+}
+
+li:nth-child(73) {
+  border-bottom-left-radius: .3vw;
+}
+
+li:nth-child(81) {
+  border-bottom-right-radius: .3vw;
+}
+
+/*                                          CUSTOM CLASSES                                          */
+
+#sudoku-grid {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 90vh;
+  background: transparent;
+  z-index: 5;
+}
+
+/*.sudoku-controls {
+  height: 100vh;
+  width: 10vw;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  
+  background: transparent;
+  z-index: 2;
+}*/
+
+.base-cell {
+  @keyframes base-cell-anim {
+    to {
+      color: white;
+      background: rgba(17, 17, 17, 0.6);
+    } 
+  }
+  animation: base-cell-anim .5s forwards;
+}
+
+.editable-cell {
+  @keyframes editable-cell-anim {
+    to {
+      color: white;
+      background: rgba(44, 44, 44, 0.6);
+    } 
+  }
+  animation: editable-cell-anim .5s forwards;
+}
+
+.uneditable-cell {
+  @keyframes uneditable-cell-anim {
+    to {
+      color: white;
+      background: rgba(17, 17, 17, 0.6);
+    } 
+  }
+  animation: uneditable-cell-anim .5s forwards;
+}
+
+.selected-cell {
+  @keyframes selected-cell-anim {
+    to {
+      color: white;
+      background: rgba(31, 31, 31, 0.8);
+    }
+  }
+  animation: selected-cell-anim 1s forwards;
+}
+
+.marked-cell {
+  @keyframes marked-cell-anim {
+    to {
+      color: rgb(24, 24, 24);
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+  @keyframes marked-cell-hover-anim {
+    to {
+      color: rgb(24, 24, 24);
+      background: rgba(227, 227, 227, 0.8);
+    }
+  }
+
+  &:hover {
+    animation: marked-cell-hover-anim .6s forwards;
+  }
+  animation: marked-cell-anim .6s forwards;
+}
+
+.collision-cell {
+  @keyframes collision-cell-anim {
+    to {
+      color: red;
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+  animation: collision-cell-anim .8s forwards;
+}
+
+.wrong-cell {
+  @keyframes wrong-cell-anim {
+    to {
+      color: red;
+      background: rgba(44, 44, 44, 0.6);
+    }
+  }
+  animation: wrong-cell-anim .8s forwards;
+}
+
+.correct-cell {
+  @keyframes correct-cell-anim {
+    to {
+      color: green;
+    }
+  }
+  animation: correct-cell-anim .8s forwards;
+}
+
+.note {
+  background: $base-color;
+  font-family: monospace;
+  padding: 2em 5em;
+  font-size: 120%;
+  order: -1;
+}
+
+@supports (display:grid) {
+  .note {display:none;}
+}
+
+/************************ Fluid-Panel ************************/
+
+#fluid-canvas {
+  position: absolute;
+  background: black;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/************************ Make Fluid-Config-Panel invisible ************************/
+
+.dg.ac {
+  display: none;
+}
+
+/*                      Button                         */
+
+//Button colors
+$primary-color: rgba(68, 68, 68, 0.5);
+$secondary-color: rgba(226, 226, 226, 0.3);
+
+.control-button:hover {
+  color: rgb(230, 230, 230);
+  background: rgba(44, 44, 44, 0.6);
+  box-shadow: 0 0 10px $secondary-color, 0 0 40px $secondary-color, 0 0 80px $secondary-color;
+  transition: .5s;
+  transition-delay: .5s;
+}
+
+/*                      Button Borders                         */
+
+.control-button span {
+  position: absolute;
+  display: block;
+  background: $secondary-color;
+}
+
+.control-button span:nth-child(1) {
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .25s;
+}
+
+.control-buttona:hover span:nth-child(1) {
+  transform: scaleY(1);
+  transform-origin: bottom;
+  transition: transform .45s;
+}
+
+.control-button span:nth-child(2) {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .25s;
+}
+
+.control-button:hover span:nth-child(2) {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform .45s;
+  //transition-delay: .25s;
+}
+
+.control-button span:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .25s;
+}
+
+.control-button:hover span:nth-child(3) {
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: transform .45s;
+  //transition-delay: .5s;
+}
+
+.control-button span:nth-child(4) {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s;
+}
+
+.control-button:hover span:nth-child(4) {
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform .45s;
+  //transition-delay: .75s;
+}
