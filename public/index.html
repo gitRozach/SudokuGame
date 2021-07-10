@@ -30,15 +30,10 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <header>
-        <nav>
-            <input type="button" id="solve-button">Solve</input>
-            <input type="button" id="check-button">Check</input>
-            <input type="button" id="hint-button">Hint</input>
-            <input type="button"  id="pause-button">00:00</input>
-        </nav>
-    </header>
-    
+    <canvas id="fluid-canvas"></canvas>
+    <script type="text/javascript" src="dat.gui.min.js"></script>
+    <script type="text/javascript" src="fluid-simulator.js"></script>
+
     <div id="root"></div>
     <!--
       To begin the development, run `npm start` or `yarn start`.
@@ -50,5 +45,6 @@
             $( ".preloader" ).addClass( "finished" );
         });
     </script>
+
   </body>
 </html>

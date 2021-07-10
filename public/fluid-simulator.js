@@ -38,7 +38,7 @@ if (isMobile()) {
 
 // Simulation section
 
-const canvas = document.getElementsByTagName('canvas')[0];
+const canvas = document.getElementById('fluid-canvas');
 resizeCanvas();
 
 let config = {

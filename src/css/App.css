@@ -142,7 +142,7 @@ header {
           justify-content: center;
   color: white;
   width: 100%;
-  height: 5%;
+  height: 100px;
   opacity: 0.0;
   -webkit-transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -164,14 +164,14 @@ header {
 
 @-webkit-keyframes header-animation-out {
   to {
-    height: 10%;
+    height: 0px;
     opacity: 1.0;
   }
 }
 
 @keyframes header-animation-out {
   to {
-    height: 10%;
+    height: 0px;
     opacity: 1.0;
   }
 }
@@ -192,56 +192,6 @@ headerh3 {
   font-size: 20px;
 }
 
-li {
-  margin: 0;
-  padding: 0;
-  border: 0px solid transparent;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  background: transparent;
-  text-align: center;
-  font-size: 2rem;
-  font-family: 'Nunito', sans-serif;
-  font-family: 'Otomanopee One', sans-serif;
-  font-size: 40px;
-}
-
-.sudoku-controls {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  height: 100vh;
-  width: 50%;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
-/*.sudoku-grid {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-
-  width: 100vw;
-  height: 100vh;
-
-  background: transparent;
-  z-index: 5;
-}*/
 #grid-list {
   display: -ms-grid;
   display: grid;
@@ -298,6 +248,27 @@ li {
   transition: .2s;
 }
 
+li {
+  margin: 0;
+  padding: 0;
+  border: 0px solid transparent;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: transparent;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Nunito', sans-serif;
+  font-family: 'Otomanopee One', sans-serif;
+  font-size: 40px;
+}
+
 li:nth-child(n) {
   border: 2px solid transparent;
   margin: 1px;
@@ -350,6 +321,17 @@ li:nth-child(81) {
 }
 
 /*                                          CUSTOM CLASSES                                          */
+/*.sudoku-grid {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: transparent;
+  z-index: 5;
+}*/
 #sudoku-grid {
   position: absolute;
   display: -webkit-box;
@@ -365,6 +347,24 @@ li:nth-child(81) {
   height: 90vh;
   background: transparent;
   z-index: 5;
+}
+
+.sudoku-controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  height: 100vh;
+  width: 50%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 /*.sudoku-controls {
