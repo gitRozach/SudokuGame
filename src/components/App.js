@@ -1,4 +1,5 @@
-import SudokuCell from './SudokuCell';
+import { useEffect } from 'react';
+import SudokuGrid from './SudokuGrid';
 import '../css/App.css';
 
 /*                          Template Sudokus                          */
@@ -7,7 +8,8 @@ const b = null;
 const BOARD_LENGTH = 9;
 const BOARD_VALUES = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-const BOARD_1 = [
+const BOARDS = [
+[
     [b, b, b, 2, 6, b, 7, b, 1],
     [6, 8, b, b, 7, b, b, 9, b],
     [1, 9, b, b, b, 4, 5, b, b],
@@ -17,9 +19,8 @@ const BOARD_1 = [
     [b, b, 9, 3, b, b, b, 7, 4],
     [b, 4, b, b, 5, b, b, 3, 6],
     [7, b, 3, b, 1, 8, b, b, b]
-];
-
-const BOARD_2 = [
+],
+[
     [9, b, 6, b, 7, b, 4, b, 3],
     [b, b, b, 4, b, b, 2, b, b],
     [b, 7, b, b, 2, 3, b, 1, b],
@@ -29,9 +30,8 @@ const BOARD_2 = [
     [b, 3, b, 7, b, b, b, 5, b],
     [b, b, 7, b, b, 5, b, b, b],
     [4, b, 5, b, 1, b, 7, b, 8]
-];
-
-const BOARD_3 = [
+],
+[
     [8, 4, 3, 5, 6, 7, 2, 1, 9],
     [b, b, b, b, b, b, b, b, 6],
     [b, b, b, b, b, b, b, b, 5],
@@ -41,6 +41,7 @@ const BOARD_3 = [
     [b, b, b, b, b, b, b, b, 4],
     [b, b, b, b, b, b, b, b, 8],
     [1, 9, 8, 3, 4, 5, 7, 6, 2]
+]
 ];
 
 /*                          Sudoku Backend                          */
@@ -69,7 +70,7 @@ class SudokuBoard {
         var first = new SudokuBoard(boards.shift());
         const tryPath = first.solve();
     
-        if (tryPath != false) {
+        if (tryPath !== false) {
             return tryPath
         }
         return this.searchForSolution(boards);
@@ -90,7 +91,7 @@ class SudokuBoard {
         var results = [];
         const firstEmpty = this.findEmptyCell(board);
     
-        if (firstEmpty != undefined) {
+        if (firstEmpty !== undefined) {
             const x = firstEmpty[0];
             const y = firstEmpty[1];
     
@@ -182,7 +183,7 @@ class SudokuBoard {
 
 /*                          State Variables                          */
 
-var sudoku = new SudokuBoard(BOARD_1);
+var sudoku = new SudokuBoard(BOARDS[0]);
 var sudokuSolution = sudoku.solve();
 var solutionCoords = null;
 var selectedCell = null;
@@ -190,392 +191,377 @@ var markCells = true;
 var paused = false;
 var secondsPassed = 0;
 
-/*                          Helper Functions                          */
+/*                          React Component Functions                          */
 
-function sleep_async(milliseconds) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
+function App() {
 
-function toHHMMSS(secondsInt) {
-    var hours   = Math.floor(secondsInt / 3600);
-    var minutes = Math.floor((secondsInt - (hours * 3600)) / 60);
-    var seconds = secondsInt - (hours * 3600) - (minutes * 60);
-
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    if (hours < 1) return minutes+':'+seconds;
-    return hours+':'+minutes+':'+seconds;
-}
-
-function resetStyleClass(item) {
-    var classValue = item.className;
-    if (!classValue.includes(' ')) return;
-    var newClassValue = classValue.split(' ')[0];
-    item.className = newClassValue;
-}
-
-function addStyleClass(item, className) {
-    var classValue = item.className;
-    var trimmedClassName = className.trim();
-    if (classValue.includes(trimmedClassName)) return;
-    item.className = classValue.concat(` ${trimmedClassName}`);
-}
-
-function removeStyleClass(item, className) {
-    var classValue = item.className;
-    var trimmedClassName = className.trim();
-    if (!classValue.includes(trimmedClassName)) return;
-    item.className = classValue.replace(` ${trimmedClassName}`, "");
-}
-
-function isBaseCell(cell) {
-    return cell != null && cell.className.includes('base-cell');
-}
-
-// Delete function?
-function updateCell(cell, value = null, className = null) {
-    if (value != null) cell.innerText = value;
-    if (className != null) addStyleClass(cell, className);
-}
- 
-function getCellCoords(cell) {
-    var i = parseInt(cell.id.split('-')[1]);
-    var x = i % BOARD_LENGTH;
-    var y = Math.floor(i / BOARD_LENGTH);
-    return [x, y];
-}
-
-function getCellByIndex(index) {
-    return document.getElementById(`cell-${index}`);
-}
- 
-function getCellByCoords(x, y) {
-    var cellIndex = y * BOARD_LENGTH + x;
-    return getCellByIndex(cellIndex);
-}
-
-function getCellValue(cell) {
-    return cell.innerText;
-}
-
-function setCellValue(cell, value) {
-    var cellCoords = getCellCoords(cell);
-    var cellValue = value.trim();
-    cell.innerText = cellValue;
-    removeStyleClass(cell, 'wrong-cell');
-
-    if (cellValue == sudokuSolution[cellCoords[1]][cellCoords[0]]) {
-        //removeStyleClass(cell, 'wrong-cell');
-        // addStyleClass(cell, 'correct-cell');
-    } else if (cellValue != "") {
-        removeStyleClass(cell, 'correct-cell');
-        //addStyleClass(cell, 'wrong-cell');
+    function sleep_async(milliseconds) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
-}
 
-function cellsHaveSameValues(cell1, cell2) {
-    if (cell1 == null || cell2 == null) return false;
-    const valueCell1 = getCellValue(cell1).trim();
-    const valueCell2 = getCellValue(cell2).trim();
-    if (valueCell1 == '' || valueCell2 == '') return false; // Do not compare empty cells
-    return  valueCell1 == valueCell2;
-}
- 
-function solveCell(cell) {
-    if (cell == null) return;
+    function toHHMMSS(secondsInt) {
+        var hours   = Math.floor(secondsInt / 3600);
+        var minutes = Math.floor((secondsInt - (hours * 3600)) / 60);
+        var seconds = secondsInt - (hours * 3600) - (minutes * 60);
 
-    solutionCoords = getCellCoords(cell);
-    updateCell(cell, sudokuSolution[solutionCoords[1]][solutionCoords[0]], 'correct-cell');
-    unselectCell(cell);
-}
- 
-function unselectCell(cell) {
-    if (cell == null) return;
-    
-    if (markCells) {
-        unmarkRow(cell);
-        unmarkColumn(cell);
-        unmarkBox(cell);
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        if (hours < 1) return minutes+':'+seconds;
+        return hours+':'+minutes+':'+seconds;
+    }
+
+    function resetStyleClass(item) {
+        var classValue = item.className;
+        if (!classValue.includes(' ')) return;
+        var newClassValue = classValue.split(' ')[0];
+        item.className = newClassValue;
+    }
+
+    function addStyleClass(item, className) {
+        var classValue = item.className;
+        var trimmedClassName = className.trim();
+        if (classValue.includes(trimmedClassName)) return;
+        item.className = classValue.concat(` ${trimmedClassName}`);
+    }
+
+    function removeStyleClass(item, className) {
+        var classValue = item.className;
+        var trimmedClassName = className.trim();
+        if (!classValue.includes(trimmedClassName)) return;
+        item.className = classValue.replace(` ${trimmedClassName}`, "");
+    }
+
+    function isBaseCell(cell) {
+        return cell != null && cell.className.includes('base-cell');
+    }
+
+    function updateCell(cell, value = null, className = null) {
+        if (value != null) cell.innerText = value;
+        if (className != null) addStyleClass(cell, className);
     }
     
-    removeStyleClass(cell, 'selected-cell');
-    selectedCell = null;
-}
- 
-function selectCell(cell) {
-    if (cell == null /*|| cell === selectedCell*/) {
-        return;
-    } 
-
-    unselectCell(selectedCell);
-
-    if (markCells) {
-        markRow(cell);
-        markColumn(cell);
-        markBox(cell);
+    function getCellCoords(cell) {
+        var i = parseInt(cell.id.split('-')[1]);
+        var x = i % BOARD_LENGTH;
+        var y = Math.floor(i / BOARD_LENGTH);
+        return [x, y];
     }
 
-    addStyleClass(cell, "selected-cell");
-    selectedCell = cell;
-}
-
-function markCell(cell, marked = true) {
-    if (cell == null) {
-        return;
+    function getCellByIndex(index) {
+        return document.getElementById(`cell-${index}`);
     }
-    if (marked) {
-        addStyleClass(cell, "marked-cell");
-    } else {
-        removeStyleClass(cell, "marked-cell");
+    
+    function getCellByCoords(x, y) {
+        var cellIndex = y * BOARD_LENGTH + x;
+        return getCellByIndex(cellIndex);
     }
-}
 
-function markRow(cell) {
-    var cellCoords = getCellCoords(cell);
-    for (var currentX = 0; currentX < BOARD_LENGTH; ++currentX) {
-        if (currentX == cellCoords[0]) {
-            // cell.className = 'selected-cell';
-            continue;
-        };
-        var currentCell = getCellByCoords(currentX, cellCoords[1]);
+    function getCellValue(cell) {
+        return cell.innerText;
+    }
 
-        if (cellsHaveSameValues(currentCell, cell)) {
-            addStyleClass(cell, "wrong-cell");
-            addStyleClass(currentCell, "collision-cell");
+    function setCellValue(cell, value) {
+        var cellCoords = getCellCoords(cell);
+        var cellValue = value.trim();
+        cell.innerText = cellValue;
+        removeStyleClass(cell, 'wrong-cell');
+
+        if (cellValue === sudokuSolution[cellCoords[1]][cellCoords[0]]) {
+            //removeStyleClass(cell, 'wrong-cell');
+            // addStyleClass(cell, 'correct-cell');
+        } else if (cellValue !== "") {
+            removeStyleClass(cell, 'correct-cell');
+            //addStyleClass(cell, 'wrong-cell');
         }
-
-        markCell(currentCell, true);
     }
-}
 
-function unmarkRow(cell) {
-    var cellCoords = getCellCoords(cell);
-    for (var currentX = 0; currentX < BOARD_LENGTH; ++currentX) {
-        var currentCell = getCellByCoords(currentX, cellCoords[1]);
-        removeStyleClass(currentCell, "collision-cell");
+    function cellsHaveSameValues(cell1, cell2) {
+        if (cell1 === null || cell2 === null) return false;
+        const valueCell1 = getCellValue(cell1).trim();
+        const valueCell2 = getCellValue(cell2).trim();
+        if (valueCell1 === '' || valueCell2 === '') return false; // Do not compare empty cells
+        return  valueCell1 === valueCell2;
+    }
+    
+    function solveCell(cell) {
+        if (cell == null) return;
+
+        solutionCoords = getCellCoords(cell);
+        updateCell(cell, sudokuSolution[solutionCoords[1]][solutionCoords[0]], 'correct-cell');
+        unselectCell(cell);
+    }
+    
+    function unselectCell(cell) {
+        if (cell == null) return;
         
-        if (isBaseCell(currentCell)) {
-            removeStyleClass(currentCell, "wrong-cell")
-        }
-
-        markCell(currentCell, false);
-    }
-}
-
-function markColumn(cell) {
-    var cellCoords = getCellCoords(cell);
-    for (var currentY = 0; currentY < BOARD_LENGTH; ++currentY) {
-        if (currentY == cellCoords[1]) {
-            // cell.className = 'selected-cell';
-            // addStyleClass(cell, "selected-cell");
-            continue;
-        };
-        var currentCell = getCellByCoords(cellCoords[0], currentY);
-
-        if (cellsHaveSameValues(currentCell, cell)) {
-            addStyleClass(cell, "wrong-cell");
-            addStyleClass(currentCell, "collision-cell");
-        }
-
-        markCell(currentCell, true);
-    }
-}
-
-function unmarkColumn(cell) {
-    var cellCoords = getCellCoords(cell);
-    for (var currentY = 0; currentY < BOARD_LENGTH; ++currentY) {
-        var currentCell = getCellByCoords(cellCoords[0], currentY);
-        removeStyleClass(currentCell, "collision-cell");
-        
-        if (isBaseCell(currentCell)) {
-            removeStyleClass(currentCell, "wrong-cell")
+        if (markCells) {
+            unmarkRow(cell);
+            unmarkColumn(cell);
+            unmarkBox(cell);
         }
         
-        markCell(currentCell, false);
+        removeStyleClass(cell, 'selected-cell');
+        selectedCell = null;
     }
-}
+    
+    function selectCell(cell) {
+        if (cell == null /*|| cell === selectedCell*/) {
+            return;
+        } 
 
-function markBox(cell) {
-    var cellCoords = getCellCoords(cell);
-    var boxSize = 3;
-    var startX = Math.floor(cellCoords[0] / 3) * boxSize;
-    var startY = Math.floor(cellCoords[1] / 3) * boxSize;
+        unselectCell(selectedCell);
 
-    for (var currentY = startY; currentY < (startY + boxSize); ++currentY) {
-        for (var currentX = startX; currentX < (startX + boxSize); ++currentX) {
-            if (currentX == cellCoords[0] && currentY == cellCoords[1]) {
+        if (markCells) {
+            markRow(cell);
+            markColumn(cell);
+            markBox(cell);
+        }
+
+        addStyleClass(cell, "selected-cell");
+        selectedCell = cell;
+    }
+
+    function markCell(cell, marked = true) {
+        if (cell === null) {
+            return;
+        }
+        if (marked) {
+            addStyleClass(cell, "marked-cell");
+        } else {
+            removeStyleClass(cell, "marked-cell");
+        }
+    }
+
+    function markRow(cell) {
+        var cellCoords = getCellCoords(cell);
+        for (var currentX = 0; currentX < BOARD_LENGTH; ++currentX) {
+            if (currentX === cellCoords[0]) {
                 // cell.className = 'selected-cell';
-                // addStyleClass(cell, "selected-cell");
                 continue;
             };
-            var currentCell = getCellByCoords(currentX, currentY);
+            var currentCell = getCellByCoords(currentX, cellCoords[1]);
 
             if (cellsHaveSameValues(currentCell, cell)) {
                 addStyleClass(cell, "wrong-cell");
                 addStyleClass(currentCell, "collision-cell");
             }
 
-            markCell(getCellByCoords(currentX, currentY), true);
+            markCell(currentCell, true);
         }
     }
-}
 
-function unmarkBox(cell) {
-    var cellCoords = getCellCoords(cell);
-    var boxSize = 3;
-    var startX = Math.floor(cellCoords[0] / 3) * boxSize;
-    var startY = Math.floor(cellCoords[1] / 3) * boxSize;
-
-    for (var currentY = startY; currentY < (startY + boxSize); ++currentY) {
-        for (var currentX = startX; currentX < (startX + boxSize); ++currentX) {
-            var currentCell = getCellByCoords(currentX, currentY);
+    function unmarkRow(cell) {
+        var cellCoords = getCellCoords(cell);
+        for (var currentX = 0; currentX < BOARD_LENGTH; ++currentX) {
+            var currentCell = getCellByCoords(currentX, cellCoords[1]);
             removeStyleClass(currentCell, "collision-cell");
-
+            
             if (isBaseCell(currentCell)) {
                 removeStyleClass(currentCell, "wrong-cell")
             }
 
-            markCell(getCellByCoords(currentX, currentY), false);
+            markCell(currentCell, false);
         }
     }
-}
 
-function startTimer() {
-    document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
-
-    function incrementSeconds() {
-        if (paused) return;
-        secondsPassed += 1;
-        document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
-    }
-    setInterval(incrementSeconds, 1000);
-}
- 
-async function solveGrid() {
-    unselectCell(selectedCell);
-    for (var i = 0; i < BOARD_LENGTH * BOARD_LENGTH; ++i) {
-        var cell = getCellByIndex(i);
-        solveCell(cell);
-        await sleep_async(10);
-    }
-}
- 
-async function checkGrid() {
-    unselectCell(selectedCell);
-    for (var i = 0; i < BOARD_LENGTH * BOARD_LENGTH; ++i) {
-        var cell = getCellByIndex(i);
+    function markColumn(cell) {
         var cellCoords = getCellCoords(cell);
+        for (var currentY = 0; currentY < BOARD_LENGTH; ++currentY) {
+            if (currentY === cellCoords[1]) {
+                // cell.className = 'selected-cell';
+                // addStyleClass(cell, "selected-cell");
+                continue;
+            };
+            var currentCell = getCellByCoords(cellCoords[0], currentY);
 
-        splatCell(cell);
-        if (cell.className.includes("base-cell") || cell.innerText.trim() == "") continue;
-        if (cell.innerText.trim() == sudokuSolution[cellCoords[1]][cellCoords[0]]) {
-            solveCell(cell);
-        } else {
-            addStyleClass(cell, "wrong-cell");
-        }
-        await sleep_async(10);
-    }
-}
+            if (cellsHaveSameValues(currentCell, cell)) {
+                addStyleClass(cell, "wrong-cell");
+                addStyleClass(currentCell, "collision-cell");
+            }
 
-function clearCell(cell) {
-    if (cell == null) return;
-    if (cell.className.includes('editable-cell')) {
-        updateCell(cell, '', 'editable-cell');
-        unselectCell(cell);
-        splatCell(cell);
-    }
-}
- 
-function keyPressed(event) {
-    if (selectedCell != null && BOARD_VALUES.includes(event.key.toString())) {
-        if (selectedCell.className.includes("editable-cell")) {
-            setCellValue(selectedCell, event.key.toString());
-            selectCell(selectedCell); // Reselect
+            markCell(currentCell, true);
         }
     }
-}
 
-function splatCell(cell) {
-    /*Console.log(window.pageYOffset);
-    console.log(window.scrollY);
-    const color = generateColor();
-    const cellWidth = cell.getBoundingClientRect().width;
-    const cellHeight = cell.getBoundingClientRect().height;
-    const relX = (cell.getBoundingClientRect().left + cellWidth * 0.5) / window.innerWidth;
-    const relY = 1 - ((cell.getBoundingClientRect().top + cellHeight * 0.5) / (window.innerHeight));
-    splat(relX, relY, 0.0, 0.0, color);*/
-}
- 
-function mouseClicked(event) {
-    var targetIdStr = event.target.id.toString();
-    console.log(targetIdStr);
+    function unmarkColumn(cell) {
+        var cellCoords = getCellCoords(cell);
+        for (var currentY = 0; currentY < BOARD_LENGTH; ++currentY) {
+            var currentCell = getCellByCoords(cellCoords[0], currentY);
+            removeStyleClass(currentCell, "collision-cell");
+            
+            if (isBaseCell(currentCell)) {
+                removeStyleClass(currentCell, "wrong-cell")
+            }
+            
+            markCell(currentCell, false);
+        }
+    }
 
-    if (targetIdStr.startsWith('cell-')) {
-        splatCell(event.target);
-        selectCell(event.target);
-    } else if (targetIdStr == 'pause-button') {
-        paused = !paused;
-        if (paused) {
-            document.getElementById('pause-button').innerHTML = 'Continue';
-        } else {
+    function markBox(cell) {
+        var cellCoords = getCellCoords(cell);
+        var boxSize = 3;
+        var startX = Math.floor(cellCoords[0] / 3) * boxSize;
+        var startY = Math.floor(cellCoords[1] / 3) * boxSize;
+
+        for (var currentY = startY; currentY < (startY + boxSize); ++currentY) {
+            for (var currentX = startX; currentX < (startX + boxSize); ++currentX) {
+                if (currentX === cellCoords[0] && currentY === cellCoords[1]) {
+                    // cell.className = 'selected-cell';
+                    // addStyleClass(cell, "selected-cell");
+                    continue;
+                };
+                var currentCell = getCellByCoords(currentX, currentY);
+
+                if (cellsHaveSameValues(currentCell, cell)) {
+                    addStyleClass(cell, "wrong-cell");
+                    addStyleClass(currentCell, "collision-cell");
+                }
+
+                markCell(getCellByCoords(currentX, currentY), true);
+            }
+        }
+    }
+
+    function unmarkBox(cell) {
+        var cellCoords = getCellCoords(cell);
+        var boxSize = 3;
+        var startX = Math.floor(cellCoords[0] / 3) * boxSize;
+        var startY = Math.floor(cellCoords[1] / 3) * boxSize;
+
+        for (var currentY = startY; currentY < (startY + boxSize); ++currentY) {
+            for (var currentX = startX; currentX < (startX + boxSize); ++currentX) {
+                var currentCell = getCellByCoords(currentX, currentY);
+                removeStyleClass(currentCell, "collision-cell");
+
+                if (isBaseCell(currentCell)) {
+                    removeStyleClass(currentCell, "wrong-cell")
+                }
+
+                markCell(getCellByCoords(currentX, currentY), false);
+            }
+        }
+    }
+
+    function startTimer() {
+        document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
+
+        function incrementSeconds() {
+            if (paused) return;
+            secondsPassed += 1;
             document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
         }
-    } else if (targetIdStr == 'delete-button') {
-        clearCell(selectedCell);
-    } else if (targetIdStr == 'solve-button') {
-        solveGrid();
-    } else if (targetIdStr == 'check-button') {
-        checkGrid();
-    } else if (targetIdStr == 'hint-button') {
-        solveCell(selectedCell);
+        setInterval(incrementSeconds, 1000);
     }
-}
+    
+    async function solveGrid() {
+        unselectCell(selectedCell);
+        for (var i = 0; i < BOARD_LENGTH * BOARD_LENGTH; ++i) {
+            var cell = getCellByIndex(i);
+            solveCell(cell);
+            await sleep_async(10);
+        }
+    }
+    
+    async function checkGrid() {
+        unselectCell(selectedCell);
+        for (var i = 0; i < BOARD_LENGTH * BOARD_LENGTH; ++i) {
+            var cell = getCellByIndex(i);
+            var cellCoords = getCellCoords(cell);
 
-/*                          React Component Functions                          */
-
-function SudokuGrid() {
-    var cells = [];
-
-    for (var i = 0; i < (9 * 9); ++i) {
-        var x = i % 9;
-        var y = Math.floor(i / 9);
-        var value = sudoku.board[y][x];
-        if (value == null) {
-          cells.push(<SudokuCell idValue={`cell-${i}`} classValue='editable-cell' textValue='' />);
-        } else {
-          cells.push(<SudokuCell idValue={`cell-${i}`} classValue='base-cell' textValue={value} />);
-        }   
+            splatCell(cell);
+            if (cell.className.includes("base-cell") || cell.innerText.trim() === '') continue;
+            if (cell.innerText.trim() === sudokuSolution[cellCoords[1]][cellCoords[0]]) {
+                solveCell(cell);
+            } else {
+                addStyleClass(cell, "wrong-cell");
+            }
+            await sleep_async(10);
+        }
     }
 
-    return cells;
-}
+    function clearCell(cell) {
+        if (cell == null) return;
+        if (cell.className.includes('editable-cell')) {
+            updateCell(cell, '', 'editable-cell');
+            unselectCell(cell);
+            splatCell(cell);
+        }
+    }
+    
+    function keyPressed(event) {
+        console.log(event.keyCode);
+        if (selectedCell != null && event.key === 'Escape') {
+            console.log('xddd');
+        }
+        if (selectedCell != null && BOARD_VALUES.includes(event.key.toString())) {
+            if (selectedCell.className.includes("editable-cell")) {
+                setCellValue(selectedCell, event.key.toString());
+                selectCell(selectedCell); // Reselect
+            }
+        }
+    }
 
-function App() {
-    document.addEventListener("keypress", keyPressed);
+    function splatCell(cell) {
+        /*Console.log(window.pageYOffset);
+        console.log(window.scrollY);
+        const color = generateColor();
+        const cellWidth = cell.getBoundingClientRect().width;
+        const cellHeight = cell.getBoundingClientRect().height;
+        const relX = (cell.getBoundingClientRect().left + cellWidth * 0.5) / window.innerWidth;
+        const relY = 1 - ((cell.getBoundingClientRect().top + cellHeight * 0.5) / (window.innerHeight));
+        splat(relX, relY, 0.0, 0.0, color);*/
+    }
+    
+    function mouseClicked(event) {
+        var targetIdStr = event.target.id.toString();
+        console.log(targetIdStr);
+
+        if (targetIdStr.startsWith('cell-')) {
+            splatCell(event.target);
+            selectCell(event.target);
+        } else if (targetIdStr === 'pause-button') {
+            paused = !paused;
+            if (paused) {
+                document.getElementById('pause-button').innerHTML = 'Continue';
+            } else {
+                document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
+            }
+        } else if (targetIdStr === 'delete-button') {
+            clearCell(selectedCell);
+        } else if (targetIdStr === 'solve-button') {
+            solveGrid();
+        } else if (targetIdStr === 'check-button') {
+            checkGrid();
+        } else if (targetIdStr === 'hint-button') {
+            solveCell(selectedCell);
+        }
+    }
+
+    document.addEventListener('keypress', keyPressed);
     document.addEventListener('click', mouseClicked);
     document.getElementById('solve-button').addEventListener('click', solveGrid);
     document.getElementById('check-button').addEventListener('click', checkGrid);
     document.getElementById('hint-button').addEventListener('click', () => console.log('lal'));
-    startTimer();
+
+    useEffect(() => startTimer());
 
     return ( 
         <div id="root">
+            <div className="preloader" id="preloader"></div>
+
             <canvas id="fluid-canvas"></canvas>
-            
-            <nav>
-              <h3></h3>
-              <h3></h3>
-              <h3></h3>
-              <h3></h3>
-              <h3 id="solve-button">Solve</h3>
-              <h3 id="check-button">Check</h3>
-              <h3 id="hint-button">Hint</h3>
-              <h3 id="pause-button">00:00</h3>
-            </nav>
 
             <div id="sudoku-grid">
-              <ul id="grid-list">{SudokuGrid()}</ul>
+                <header>
+                    <nav>
+                        <h3 id="solve-button">Solve</h3>
+                        <h3 id="check-button">Check</h3>
+                        <h3 id="hint-button">Hint</h3>
+                        <h3 id="pause-button">00:00</h3>
+                    </nav>
+                </header>
+                <ul id="grid-list"> <SudokuGrid sudoku={sudoku}/> </ul>
             </div>
 
         </div>

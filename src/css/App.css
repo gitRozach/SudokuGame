@@ -129,294 +129,173 @@ html, body {
   }
 }
 
-/* For Mobile and Tablets */
-@media (-webkit-max-device-pixel-ratio: 1), (max-resolution: 1dppx) {
-  header {
-    position: absolute;
-    width: 100%;
-    height: 10%;
-    -webkit-animation: header-animation 1s forwards;
-            animation: header-animation 1s forwards;
-  }
-  @-webkit-keyframes header-animation {
-    to {
-      height: 15%;
-      opacity: 1.0;
-    }
-  }
-  @keyframes header-animation {
-    to {
-      height: 15%;
-      opacity: 1.0;
-    }
-  }
-  header h3 {
-    color: white;
-  }
-  li {
-    margin: 0;
-    padding: 0;
-    border: 0px solid #f1eeee;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    background: transparent;
-    text-align: center;
-    font-family: 'Roboto';
-    font-size: 35px;
-  }
-  li span {
-    margin-top: 0.4rem;
-  }
-  .sudoku-controls {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+header {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: white;
+  width: 100%;
+  height: 5%;
+  opacity: 0.0;
+  -webkit-transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@-webkit-keyframes header-animation-in {
+  to {
     height: 100px;
-    width: 100%;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-animation: sudoku-controls-anim .8s forwards;
-            animation: sudoku-controls-anim .8s forwards;
-  }
-  @-webkit-keyframes sudoku-controls-anim {
-    from {
-      margin-top: 0vh;
-    }
-    to {
-      margin-top: 5vh;
-    }
-  }
-  @keyframes sudoku-controls-anim {
-    from {
-      margin-top: 0vh;
-    }
-    to {
-      margin-top: 5vh;
-    }
-  }
-  /*#sudoku-grid {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 5;
-  }*/
-  #grid-list {
-    display: -ms-grid;
-    display: grid;
-    -ms-grid-columns: (10vh)[9];
-        grid-template-columns: repeat(9, 10vh);
-    -ms-grid-rows: (10vh)[9];
-        grid-template-rows: repeat(9, 10vh);
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -ms-flex-line-pack: center;
-        align-content: center;
-    grid-gap: 0rem;
-    list-style: none;
-    padding: 0;
-    margin-left: 0;
-    -webkit-animation: sudoku-grid-anim .8s forwards;
-            animation: sudoku-grid-anim .8s forwards;
-  }
-  @-webkit-keyframes sudoku-grid-anim {
-    from {
-      margin-top: 0vh;
-    }
-    to {
-      margin-top: 5vh;
-    }
-  }
-  @keyframes sudoku-grid-anim {
-    from {
-      margin-top: 0vh;
-    }
-    to {
-      margin-top: 5vh;
-    }
-  }
-  .control-button {
-    position: relative;
-    display: inline-block;
-    padding: 10px 30px;
-    margin: 10px;
-    background: transparent;
-    color: white;
-    letter-spacing: 5px;
-    font-size: 24px;
-    text-transform: uppercase;
-    text-align: center;
-    width: 360px;
-    min-height: 50px;
-    overflow: hidden;
-    -webkit-transition: .2s;
-    transition: .2s;
+    opacity: 1.0;
   }
 }
 
-/* For Desktop */
-@media screen and (min-width: 780px) {
-  header {
-    position: absolute;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    width: 100%;
-    height: 5%;
-    opacity: 0.0;
-    -webkit-transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
-    transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
-  @-webkit-keyframes header-animation-in {
-    to {
-      height: 100px;
-      opacity: 1.0;
-    }
-  }
-  @keyframes header-animation-in {
-    to {
-      height: 100px;
-      opacity: 1.0;
-    }
-  }
-  @-webkit-keyframes header-animation-out {
-    to {
-      height: 10%;
-      opacity: 1.0;
-    }
-  }
-  @keyframes header-animation-out {
-    to {
-      height: 10%;
-      opacity: 1.0;
-    }
-  }
-  header:hover {
-    height: 15%;
+@keyframes header-animation-in {
+  to {
+    height: 100px;
     opacity: 1.0;
   }
-  headerh3 {
-    font-size: 20px;
-    color: white;
-  }
-  li {
-    margin: 0;
-    padding: 0;
-    border: 0px solid transparent;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    background: transparent;
-    text-align: center;
-    font-size: 2rem;
-    font-family: 'Roboto';
-    font-size: 40px;
-  }
-  .sudoku-controls {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    height: 100vh;
-    width: 50%;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-  }
-  /*.sudoku-grid {
-    position: relative;
-    display: flex;
-    flex-direction: row;
+}
 
-    width: 100vw;
-    height: 100vh;
+@-webkit-keyframes header-animation-out {
+  to {
+    height: 10%;
+    opacity: 1.0;
+  }
+}
 
-    background: transparent;
-    z-index: 5;
-  }*/
-  #grid-list {
-    display: -ms-grid;
-    display: grid;
-    -ms-grid-columns: (10vh)[9];
-        grid-template-columns: repeat(9, 10vh);
-    -ms-grid-rows: (10vh)[9];
-        grid-template-rows: repeat(9, 10vh);
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -ms-flex-line-pack: center;
-        align-content: center;
-    grid-gap: 0rem;
-    list-style: none;
-    padding: 0;
-    margin-top: 0;
-    -webkit-animation: sudoku-grid-anim .8s forwards;
-            animation: sudoku-grid-anim .8s forwards;
+@keyframes header-animation-out {
+  to {
+    height: 10%;
+    opacity: 1.0;
   }
-  @-webkit-keyframes sudoku-grid-anim {
-    from {
-      margin-left: 0vh;
-    }
-    to {
-      margin-left: 5vh;
-    }
+}
+
+header:hover {
+  height: 15%;
+  opacity: 1.0;
+}
+
+headernav {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto;
+      grid-template-columns: auto auto auto auto;
+}
+
+headerh3 {
+  font-size: 20px;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+  border: 0px solid transparent;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: transparent;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Nunito', sans-serif;
+  font-family: 'Otomanopee One', sans-serif;
+  font-size: 40px;
+}
+
+.sudoku-controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  height: 100vh;
+  width: 50%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+/*.sudoku-grid {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: transparent;
+  z-index: 5;
+}*/
+#grid-list {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (10vh)[9];
+      grid-template-columns: repeat(9, 10vh);
+  -ms-grid-rows: (10vh)[9];
+      grid-template-rows: repeat(9, 10vh);
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  grid-gap: 0rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  -webkit-animation: sudoku-grid-anim .8s forwards;
+          animation: sudoku-grid-anim .8s forwards;
+}
+
+@-webkit-keyframes sudoku-grid-anim {
+  from {
+    margin-left: 0vh;
   }
-  @keyframes sudoku-grid-anim {
-    from {
-      margin-left: 0vh;
-    }
-    to {
-      margin-left: 5vh;
-    }
+  to {
+    margin-left: 5vh;
   }
-  .control-button {
-    position: relative;
-    display: inline-block;
-    padding: 10px 30px;
-    margin: 30px;
-    background: transparent;
-    color: white;
-    letter-spacing: 4px;
-    text-decoration: none;
-    font-size: 24px;
-    text-transform: uppercase;
-    text-align: center;
-    width: 300px;
-    overflow: hidden;
-    -webkit-transition: .2s;
-    transition: .2s;
+}
+
+@keyframes sudoku-grid-anim {
+  from {
+    margin-left: 0vh;
   }
+  to {
+    margin-left: 5vh;
+  }
+}
+
+.control-button {
+  position: relative;
+  display: inline-block;
+  padding: 10px 30px;
+  margin: 30px;
+  background: transparent;
+  color: white;
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 300px;
+  overflow: hidden;
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 li:nth-child(n) {

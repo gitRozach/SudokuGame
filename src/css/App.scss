@@ -105,241 +105,134 @@ html, body {
   z-index: 10;
 }
 
-/* For Mobile and Tablets */
-@media (max-resolution: 1dppx) {
-  header {
-    @keyframes header-animation {
-      to {
-        height: 15%;
-        opacity: 1.0;
-      }
-    }
 
-    & h3 {
-      color: white;
-    }
-    position: absolute;
-    width: 100%;
-    height: 10%;
-    animation: header-animation 1s forwards;
-  }
 
-  li {
-    margin: 0;
-    padding: 0;
-    border: 0px solid $base-color;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    background: transparent;
-    
-    text-align: center;
-    font-family: 'Roboto';
-    font-size: 35px;
-    
-    span {
-      margin-top: 0.4rem;
-    }  
-  }
-
-  .sudoku-controls {
-    @keyframes sudoku-controls-anim {
-      from {
-        margin-top: 0vh;
-      }
-      to {
-        margin-top: 5vh;
-      }
-    }
-
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    animation: sudoku-controls-anim .8s forwards;
-  }
-
-  /*#sudoku-grid {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 5;
-  }*/
-
-  #grid-list {
-    @keyframes sudoku-grid-anim {
-      from {
-        margin-top: 0vh;
-      }
-      to {
-        margin-top: 5vh;
-      }
-    }
-
-    display: grid;
-    
-    grid-template-columns: repeat(9, 10vh);
-    grid-template-rows: repeat(9, 10vh);
-    
-    justify-content: center;
-    align-content: center;
-    
-    grid-gap: 0rem;
-    list-style: none;
-    
-    padding: 0;
-    margin-left: 0;
-    animation: sudoku-grid-anim .8s forwards;
-  }
-
-  .control-button  {
-    position: relative;
-    display: inline-block;
-    padding: 10px 30px;
-    margin: 10px;
-  
-    background: transparent;
-    color: white;
-    
-    letter-spacing: 5px;
-    font-size: 24px;
-    text-transform: uppercase;
-    text-align: center;
-  
-    width: 360px;
-    min-height: 50px;
-  
-    overflow: hidden;
-    transition: .2s;
-  }
-}
-
-/* For Desktop */
-@media screen and (min-width: 780px) {
-  header {
-    @keyframes header-animation-in {
-      to {
-        height: 100px;
-        opacity: 1.0;
-      }
-    }
-
-    @keyframes header-animation-out {
-      to {
-        height: 10%;
-        opacity: 1.0;
-      }
-    }
-
-    &:hover {
-      height: 15%;
+header {
+  @keyframes header-animation-in {
+    to {
+      height: 100px;
       opacity: 1.0;
     }
+  }
 
-    &h3 {
-      font-size: 20px;
-      color: white;
+  @keyframes header-animation-out {
+    to {
+      height: 10%;
+      opacity: 1.0;
     }
-    position: absolute;
-    display: flex;
-    width: 100%;
-    height: 5%;
-    opacity: 0.0;
-    transition: all .7s cubic-bezier(0.075, 0.82, 0.165, 1);
   }
 
-  li {
-    margin: 0;
-    padding: 0;
-    border: 0px solid transparent;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    background: transparent;
-    
-    text-align: center;
-    font-size: $cell-font-size;
-    font-family: 'Roboto';
-    font-size: 40px;
+  &:hover {
+    height: 15%;
+    opacity: 1.0;
   }
 
-  .sudoku-controls {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 50%;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /*.sudoku-grid {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-
-    width: 100vw;
-    height: 100vh;
-
-    background: transparent;
-    z-index: 5;
-  }*/
-
-  #grid-list {
-    @keyframes sudoku-grid-anim {
-      from {
-        margin-left: 0vh;
-      }
-      to {
-        margin-left: 5vh;
-      }
-    }
-
+  &nav {
     display: grid;
-    
-    grid-template-columns: repeat(9, 10vh);
-    grid-template-rows: repeat(9, 10vh);
-    
-    justify-content: center;
-    align-content: center;
-    
-    grid-gap: 0rem;
-    list-style: none;
-    
-    padding: 0;
-    margin-top: 0;
-    animation: sudoku-grid-anim .8s forwards;
+    grid-template-columns: auto auto auto auto;
   }
 
-  .control-button  {
-    position: relative;
-    display: inline-block;
-    padding: 10px 30px;
-    margin: 30px;
-  
-    background: transparent;
-    color: white;
-    
-    letter-spacing: 4px;
-    text-decoration: none;
-    font-size: 24px;
-    text-transform: uppercase;
-    text-align: center;
-  
-    width: 300px;
-  
-    overflow: hidden;
-    transition: .2s;
+  &h3 {
+    font-size: 20px;
   }
+
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  color: white;
+
+  width: 100%;
+  height: 5%;
+  opacity: 0.0;
+  transition: all .7s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+li {
+  margin: 0;
+  padding: 0;
+  border: 0px solid transparent;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: transparent;
+  
+  text-align: center;
+  font-size: $cell-font-size;
+  font-family: 'Nunito', sans-serif;
+  font-family: 'Otomanopee One', sans-serif;
+  font-size: 40px;
+}
+
+.sudoku-controls {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+/*.sudoku-grid {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: transparent;
+  z-index: 5;
+}*/
+
+#grid-list {
+  @keyframes sudoku-grid-anim {
+    from {
+      margin-left: 0vh;
+    }
+    to {
+      margin-left: 5vh;
+    }
+  }
+
+  display: grid;
+  
+  grid-template-columns: repeat(9, 10vh);
+  grid-template-rows: repeat(9, 10vh);
+  
+  justify-content: center;
+  align-content: center;
+  
+  grid-gap: 0rem;
+  list-style: none;
+  
+  padding: 0;
+  margin-top: 0;
+  animation: sudoku-grid-anim .8s forwards;
+}
+
+.control-button  {
+  position: relative;
+  display: inline-block;
+  padding: 10px 30px;
+  margin: 30px;
+
+  background: transparent;
+  color: white;
+  
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+
+  width: 300px;
+
+  overflow: hidden;
+  transition: .2s;
 }
 
 li:nth-child(n) {

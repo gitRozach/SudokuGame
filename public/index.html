@@ -4,7 +4,11 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,600&family=Otomanopee+One&display=swap" rel="stylesheet">
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -25,19 +29,13 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    
-    <div className="preloader" id="preloader"></div>
 
     <header>
         <nav>
-            <h3></h3>
-            <h3></h3>
-            <h3></h3>
-            <h3></h3>
-            <h3 id="solve-button">Solve</h3>
-            <h3 id="check-button">Check</h3>
-            <h3 id="hint-button">Hint</h3>
-            <h3 id="pause-button">00:00</h3>
+            <input type="button" id="solve-button">Solve</input>
+            <input type="button" id="check-button">Check</input>
+            <input type="button" id="hint-button">Hint</input>
+            <input type="button"  id="pause-button">00:00</input>
         </nav>
     </header>
     
