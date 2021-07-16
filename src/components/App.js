@@ -14,15 +14,7 @@ function App(props) {
             <div className="preloader" id="preloader"></div>
 
             <div id="sudoku-grid">
-                <header>
-                    <nav>
-                        <button key="solve-button" id="solve-button">Solve</button>
-                        <button key="check-button" id="check-button">Check</button>
-                        <button key="hint-button" id="hint-button">Hint</button>
-                        <button key="pause-button" id="pause-button">00:00</button>
-                    </nav>
-                </header>
-                <ul id="grid-list"> <SudokuGrid sudoku={new SudokuBoard(sudokuBoards[boardIndex])}/> </ul>
+                <SudokuGrid sudoku={new SudokuBoard(sudokuBoards[boardIndex])}/>
             </div>
 
         </div>

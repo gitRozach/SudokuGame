@@ -9,7 +9,7 @@ const BOARD_VALUES = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 function SudokuGrid(props) {
   //
-  let sudoku = props.sudoku;
+  var sudoku = props.sudoku;
   var cells = [];
   var sudokuSolution = sudoku.solve();
   var solutionCoords = null;
@@ -56,6 +56,7 @@ function SudokuGrid(props) {
       var i = parseInt(cell.id.split('-')[1]);
       var x = i % BOARD_LENGTH;
       var y = Math.floor(i / BOARD_LENGTH);
+      console.log(x, y);
       return [x, y];
   }
 
@@ -379,15 +380,15 @@ function SudokuGrid(props) {
     return hours+':'+minutes+':'+seconds;
 }
 
-function startTimer() {
-  var secondsPassed = 0;
-  function incrementSeconds() {
-      if (paused) return;
-      setSecondsPassed(++secondsPassed);
-      //document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
+  function startTimer() {
+    var secondsPassed = 0;
+    function incrementSeconds() {
+        if (paused) return;
+        setSecondsPassed(++secondsPassed);
+        //document.getElementById('pause-button').innerHTML = toHHMMSS(secondsPassed);
+    }
+    setInterval(incrementSeconds, 1000);
   }
-  setInterval(incrementSeconds, 1000);
-}
 
   useEffect(() => {
     $(document).keyup((event) => keyPressed(event));
@@ -408,7 +409,19 @@ function startTimer() {
       }   
   }
   return [
-    cells
+    <div className={paused ? "SudokuGrid" : "SudokuGrid .paused"}>
+      <div className="sudoku-controls">
+        <button className="control-button">00:00<span></span><span></span><span></span><span></span></button>
+      </div>,
+      <ul id="grid-list"> 
+        {cells}
+      </ul>,
+      <div className="sudoku-controls">
+        <button className="control-button">Hint<span></span><span></span><span></span><span></span></button>
+        <button className="control-button">Check<span></span><span></span><span></span><span></span></button>
+        <button className="control-button">Solve<span></span><span></span><span></span><span></span></button>
+      </div>
+    </div>
   ];
 }
 
