@@ -1,6 +1,12 @@
+# Sudoku Game App
+
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+Installs all dependencies for this project [node_modules]. Required step since the node_modules folder is not included in this repository.
 
 ### `npm start`
 
